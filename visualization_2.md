@@ -236,3 +236,51 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 
 Arguments to 'geom\_\*'
 -----------------------
+
+``` r
+centralpark_df = weather_df %>% filter(name == "CentralPark_NY")
+waikiki_df = weather_df %>% filter(name == "Waikiki_HA")
+
+ggplot(waikiki_df, aes(x = date, y = tmax)) + 
+  geom_point() +
+  geom_line(data = centralpark_df)
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="visualization_2_files/figure-markdown_github/unnamed-chunk-11-1.png" width="90%" />
+
+patchwork
+---------
+
+``` r
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(aes(size = prcp), alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~ name)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="visualization_2_files/figure-markdown_github/unnamed-chunk-12-1.png" width="90%" />
+
+``` r
+tmax_tmin_p = ggplot(weather_df, aes(x = tmax, y = tmin, color = name)) + 
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+#making a scatterplot here
+prcp_dens_p = weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = .5) + 
+  theme(legend.position = "none")
+
+tmax_date_p = ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  theme(legend.position = "bottom")
+```

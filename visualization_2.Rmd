@@ -178,3 +178,59 @@ ggplot(waikiki_df, aes(x = date, y = tmax)) +
   geom_line(data = centralpark_df)
 ```
 
+## patchwork
+```{r}
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(aes(size = prcp), alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(~ name) +
+  labs(
+    title = "Termperature vs. date",
+    x = "Date",
+    y = "Maximum daily temperature (C)",
+    caption = "Data from rnoaa package"
+  ) +
+  viridis::scale_color_viridis(
+    name - "Location",
+    discrete = TRUE
+  ) +
+  theme_bw()
+theme(legend.position = "bottom")
+```
+
+```{r}
+tmax_tmin_p = ggplot(weather_df, aes(x = tmax, y = tmin, color = name)) + 
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+#making a scatterplot here
+prcp_dens_p = weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = .5) + 
+  theme(legend.position = "none")
+
+tmax_date_p = ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  theme(legend.position = "bottom")
+
+(tmax_tmin_p + prcp_dens_p)/tmax_date_p
+```
+
+## Data manipulation
+factors...
+
+```{r}
+ggplot(weather_df, aes(x = name, y = tmax, fill = name)) +
+    geom_violin()
+```
+
+```{r}
+weather_df %>%
+  mutate(name = forcats::fct_relevel(name, c("Waikiki_HA", "CentralPark_NY", "Waterhole_WA"))) %>% 
+  ggplot(aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), color = "blue", alpha = .5) + 
+  theme(legend.position = "bottom")
+# putting in different order of choosing with the mutate option
+```
+
