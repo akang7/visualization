@@ -169,4 +169,12 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 ```
 
 ## Arguments to 'geom_*'
+```{r}
+centralpark_df = weather_df %>% filter(name == "CentralPark_NY")
+waikiki_df = weather_df %>% filter(name == "Waikiki_HA")
+
+ggplot(waikiki_df, aes(x = date, y = tmax)) + 
+  geom_point() +
+  geom_line(data = centralpark_df)
+```
 
