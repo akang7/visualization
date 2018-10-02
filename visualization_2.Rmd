@@ -2,7 +2,7 @@
 title: "Visualization 2"
 author: "Ashley Kang"
 date: "10/2/2018"
-output: html_document
+output: github_document
 ---
 
 ---
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(ggridges)
 library(patchwork)
-
+library(ggthemes)
 
 ```
 
@@ -131,4 +131,42 @@ ggplot(weather_df, aes(x = tmin, y = tmax)) +
   )
 
 ```
+
+
+## Themes
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) + 
+  labs(
+    title = "Temperature plot",
+    x = "Minimum daily temperature (C)",
+    y = "Maxiumum daily temperature (C)",
+    caption = "Data from the rnoaa package"
+  ) + 
+  viridis::scale_color_viridis(
+    name = "Location", 
+    discrete = TRUE
+  ) + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+#order matters set theme then change legend
+```
+
+```{r}
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_smooth(se = FALSE) + 
+  geom_point(aes(size = prcp), alpha = .75) + 
+  labs(
+    title = "Temperature plot",
+    x = "Date",
+    y = "Maxiumum daily temperature (C)",
+    caption = "Data from the rnoaa package"
+  ) + 
+  viridis::scale_color_viridis(discrete = TRUE) + 
+  theme_bw() + 
+  theme(legend.position = "bottom")
+```
+
+## Arguments to 'geom_*'
 
